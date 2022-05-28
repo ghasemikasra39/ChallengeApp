@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, TextInput} from 'react-native';
+import {View, Text, TextInput, Image} from 'react-native';
 
 export default function HomeScreen(props) {
   const [searchValue, setSearchValue] = useState();
@@ -28,6 +28,10 @@ export default function HomeScreen(props) {
         onChangeText={onChangeTextHander}
         value={searchValue}
         placeholder="Type to search"
+      />
+      <Image
+        style={{width: 40, height: 40}}
+        source={require('../../assets/icons/Group_4x.png')}
       />
     </>
   );
