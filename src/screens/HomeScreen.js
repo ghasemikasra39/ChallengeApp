@@ -9,6 +9,7 @@ import {
     FlatList,
 } from 'react-native';
 import {DATA2} from '../../assets/data';
+import Accordion from 'react-native-collapsible/Accordion';
 
 export default function HomeScreen(props) {
     const [searchValue, setSearchValue] = useState();
@@ -17,6 +18,7 @@ export default function HomeScreen(props) {
     const [dropdownTop, setDropdownTop] = useState(0);
     const [dropdownData, setDropdownData] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
+    const [activeAccordionSections, setActiveAccordionSections] = useState([]);
     const SearchInputView = useRef();
 
     useEffect(() => {
@@ -206,7 +208,7 @@ export default function HomeScreen(props) {
             setRawData(rawDataUpdated);
 
             // remove it from selectedItems
-            const updatedSelectedItems = selectedItems.filter( person => {
+            const updatedSelectedItems = selectedItems.filter(person => {
                 return person.firstname !== item.firstname;
             });
             setSelectedItems(updatedSelectedItems);
@@ -232,6 +234,30 @@ export default function HomeScreen(props) {
                 />
             </TouchableOpacity>
         );
+    };
+
+    const renderAccordionHeader = (item, _, isActive) => {
+
+        const icon = isActive ? require('../../assets/icons/up_4x.png') : require('../../assets/icons/down.png')
+        return (
+            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text>{item.category}</Text>
+                <Image
+                    style={{width: 20, height: 20}}
+                    source={icon}
+                />
+            </View>
+        );
+    };
+
+    const renderAccordionContent = (item, _, isActive) => {
+        return (
+            <Text>{item.year}</Text>
+        );
+    };
+
+    const updateAccordionActiveSection = (sections) => {
+        setActiveAccordionSections(sections.includes(undefined) ? [] : sections);
     };
 
     return (
@@ -297,6 +323,15 @@ export default function HomeScreen(props) {
                     horizontal
                 />
             </View>
+            <Accordion
+                sections={rawData}
+                activeSections={activeAccordionSections}
+                // renderSectionTitle={this._renderSectionTitle}
+                renderHeader={renderAccordionHeader}
+                renderContent={renderAccordionContent}
+                onChange={updateAccordionActiveSection}
+                touchableComponent={TouchableOpacity}
+            />
             {renderDropdown()}
         </>
     );
