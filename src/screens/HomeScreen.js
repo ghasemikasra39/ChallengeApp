@@ -7,6 +7,8 @@ import {
     StyleSheet,
     TouchableOpacity,
     FlatList,
+    Platform,
+    ScrollView,
 } from 'react-native';
 import {DATA2} from '../../assets/data';
 import Accordion from 'react-native-collapsible/Accordion';
@@ -191,6 +193,7 @@ export default function HomeScreen(props) {
                 {categoryItem.laureates.map(person => {
                     return (
                         <TouchableOpacity
+                            key={person.firstname}
                             onPress={() => onItemPress(person)}
                             style={{
                                 backgroundColor: person.selected ? '#040FD9' : '#F0F2F4',
@@ -201,7 +204,6 @@ export default function HomeScreen(props) {
                                 marginHorizontal: 4,
                                 marginVertical: 4,
                             }}>
-
                             <Text style={{
                                 fontFamily: 'Inter-Regular',
                                 fontSize: 16,
@@ -281,15 +283,77 @@ export default function HomeScreen(props) {
                     horizontal
                 />
             </View>
-            <Accordion
-                sections={rawData}
-                activeSections={activeAccordionSections}
-                // renderSectionTitle={this._renderSectionTitle}
-                renderHeader={renderAccordionHeader}
-                renderContent={renderAccordionContent}
-                onChange={updateAccordionActiveSection}
-                touchableComponent={TouchableOpacity}
-            />
+            <ScrollView
+                contentContainerStyle={{
+                    paddingBottom: Platform.OS === 'ios' ? 100 : Platform.OS === 'web' ? 100 : 180
+                }}
+                showsVerticalScrollIndicator={false}
+            >
+                <Accordion
+                    sections={rawData}
+                    activeSections={activeAccordionSections}
+                    renderHeader={renderAccordionHeader}
+                    renderContent={renderAccordionContent}
+                    onChange={updateAccordionActiveSection}
+                    touchableComponent={TouchableOpacity}
+                    // renderAsFlatList={true}
+                    // containerStyle={{marginBottom: Platform.OS === 'ios' ? 100 : Platform.OS === 'web' ? 40 : 100}}
+                />
+            </ScrollView>
+            <View
+                style={{
+                    position: 'absolute',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    bottom: 0,
+                    paddingBottom: Platform.OS === 'ios' ? 40 : Platform.OS === 'web' ? 20 : 100,
+                    left: 0,
+                    right: 0,
+                    borderTopColor: '#F0F2F4',
+                    backgroundColor: 'white',
+                    borderTopWidth: 1,
+                    paddingTop: 16,
+                    paddingHorizontal: 24,
+                }}
+            >
+                <TouchableOpacity
+                    onPress={() => console.log('go back')}
+                    style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: '#F0F2F4',
+                        borderRadius: 12,
+                        width: 81,
+                        height: 44,
+                        paddingVertical: 6,
+                        paddingHorizontal: 12,
+                    }}>
+                    <Text style={{
+                        fontFamily: 'Inter-Regular',
+                        fontSize: 14,
+                        color: '#1E293B',
+                    }}>Back</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => console.log('Continue')}
+                    style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: '#040FD9',
+                        borderRadius: 12,
+                        width: 109,
+                        height: 44,
+                        paddingVertical: 6,
+                        paddingHorizontal: 12,
+                    }}>
+                    <Text style={{
+                        fontFamily: 'Inter-Regular',
+                        fontSize: 14,
+                        color: '#FFFFFF',
+                    }}>Continue</Text>
+                </TouchableOpacity>
+            </View>
+
             {renderDropdown()}
         </>
     );
