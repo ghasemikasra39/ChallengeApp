@@ -38,106 +38,12 @@ export default function HomeScreen(props) {
     };
 
     const renderDropdown = () => {
-        // const renderSectionHeader = ({section: {title}}) => {
-        //     return (
-        //         <View style={{alignItems: "center"}}>
-        //             <View style={styles.divider} />
-        //             <View style={{paddingVertical: 7}}>
-        //                 <Text style={AppStyles.title}>{title}</Text>
-        //             </View>
-        //         </View>
-        //     )
-        // }
-        //
-        //
-        // const renderMenu = (userChallenges, challengeData) => {
-        //     let userChallengesClone = [...userChallenges]
-        //     userChallengesClone.unshift(Global.globalChallenge)
-        //     const challengeDataClone = [...challengeData]
-        //     const userChallengesWithTitle = {
-        //         title: "MEINE GRUPPEN",
-        //         data: userChallengesClone,
-        //     }
-        //     const nearChallengesWithTitle = {
-        //         title: "VORSCHLÄGE",
-        //         data: challengeDataClone,
-        //     }
-        //     let DATA = [userChallengesWithTitle, nearChallengesWithTitle]
-        //     if (challengeDataClone.length < 1) {
-        //         DATA = [userChallengesWithTitle]
-        //     }
-        //
-        //     return (
-        //         <View>
-        //             <SectionList
-        //                 sections={DATA}
-        //                 keyExtractor={(item, index) => item + index}
-        //                 renderItem={renderItem}
-        //                 renderSectionHeader={renderSectionHeader}
-        //                 style={{maxHeight: height / 2}}
-        //             />
-        //             {renderCreateNewGroup()}
-        //         </View>
-        //     )
-        // }
-        //
-        // const renderInfo = () => {
-        //     if (!activeChallenge) {
-        //         return (
-        //             <View style={styles.noChallengeText}>
-        //                 <Text style={styles.itemText}>Wähle bitte eine Gruppe aus</Text>
-        //             </View>
-        //         )
-        //     }
-        //
-        //     const {participants, description} = activeChallenge
-        //     const FACES = participants.map(participant => {
-        //         return {
-        //             ...participant,
-        //             id: participant.userId,
-        //             imageUrl: participant.profilePictureUrl,
-        //         }
-        //     })
-        //     const membersText = `${
-        //         !activeChallenge.title ? "über 150.000" : participants.length
-        //     } Teilnehmer`
-        //
-        //     return (
-        //         <View style={styles.infoContainer}>
-        //             <View style={styles.facePileContainer}>
-        //                 <View style={{marginRight: 15}}>
-        //                     <Text style={styles.itemText}>{membersText}</Text>
-        //                 </View>
-        //                 <FacePile numFaces={5} faces={FACES} />
-        //             </View>
-        //             <View>
-        //                 <Text style={styles.itemText}>{description}</Text>
-        //             </View>
-        //         </View>
-        //     )
-        // }
-        //
-        // const Loading = (
-        //     <View style={styles.loadingText}>
-        //         <Text style={styles.itemText}>Lädt...</Text>
-        //     </View>
-        // )
 
         const renderItem = ({item}) => {
             const onItemPress = (item) => {
-                console.log('tapped item: ', item);
-                setSelectedItems(prevState => [...prevState, item]);
                 setDropdownVisible(false);
                 setSearchValue('');
-                const rawDataUpdated = [];
-                rawData.forEach(data => {
-                    const updatedLaureates = data.laureates.map(person => (person.firstname === item.firstname) ? {
-                        ...person,
-                        selected: true,
-                    } : person);
-                    rawDataUpdated.push({...data, laureates: updatedLaureates});
-                });
-                setRawData(rawDataUpdated);
+                addItem(item);
             };
             return (
                 <TouchableOpacity
@@ -194,24 +100,39 @@ export default function HomeScreen(props) {
         console.log(dataSorted);
     };
 
+    const addItem = (itemToAdd) => {
+        setSelectedItems(prevState => [...prevState, itemToAdd]);
+        const rawDataUpdated = [];
+        rawData.forEach(data => {
+            const updatedLaureates = data.laureates.map(person => (person.firstname === itemToAdd.firstname) ? {
+                ...person,
+                selected: true,
+            } : person);
+            rawDataUpdated.push({...data, laureates: updatedLaureates});
+        });
+        setRawData(rawDataUpdated);
+    };
+
+    const removeItem = (itemToRemove) => {
+        const rawDataUpdated = [];
+        rawData.forEach(data => {
+            const updatedLaureates = data.laureates.map(person => (person.firstname === itemToRemove.firstname) ? {
+                ...person,
+                selected: false,
+            } : person);
+            rawDataUpdated.push({...data, laureates: updatedLaureates});
+        });
+        setRawData(rawDataUpdated);
+
+        const updatedSelectedItems = selectedItems.filter(person => {
+            return person.firstname !== itemToRemove.firstname;
+        });
+        setSelectedItems(updatedSelectedItems);
+    };
+
     const renderSelectedItems = ({item}) => {
         const onRemoveItem = () => {
-            // set Selected to false in the rawData
-            const rawDataUpdated = [];
-            rawData.forEach(data => {
-                const updatedLaureates = data.laureates.map(person => (person.firstname === item.firstname) ? {
-                    ...person,
-                    selected: false,
-                } : person);
-                rawDataUpdated.push({...data, laureates: updatedLaureates});
-            });
-            setRawData(rawDataUpdated);
-
-            // remove it from selectedItems
-            const updatedSelectedItems = selectedItems.filter(person => {
-                return person.firstname !== item.firstname;
-            });
-            setSelectedItems(updatedSelectedItems);
+            removeItem(item);
         };
         return (
             <TouchableOpacity
@@ -238,10 +159,16 @@ export default function HomeScreen(props) {
 
     const renderAccordionHeader = (item, _, isActive) => {
 
-        const icon = isActive ? require('../../assets/icons/up_4x.png') : require('../../assets/icons/down.png')
+        const icon = isActive ? require('../../assets/icons/up_4x.png') : require('../../assets/icons/down.png');
         return (
-            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text>{item.category}</Text>
+            <View style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                height: 44,
+                alignItems: 'center',
+                marginVertical: 15,
+            }}>
+                <Text style={{fontFamily: 'Inter-Regular', fontSize: 16, color: '#1E293B'}}>{item.category}</Text>
                 <Image
                     style={{width: 20, height: 20}}
                     source={icon}
@@ -250,9 +177,40 @@ export default function HomeScreen(props) {
         );
     };
 
-    const renderAccordionContent = (item, _, isActive) => {
+    const renderAccordionContent = (categoryItem, _, isActive) => {
+        const onItemPress = (person) => {
+            if (person.selected) {
+                removeItem(person);
+            } else {
+                addItem(person);
+            }
+        };
+
         return (
-            <Text>{item.year}</Text>
+            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                {categoryItem.laureates.map(person => {
+                    return (
+                        <TouchableOpacity
+                            onPress={() => onItemPress(person)}
+                            style={{
+                                backgroundColor: person.selected ? '#040FD9' : '#F0F2F4',
+                                borderRadius: 50,
+                                height: 44,
+                                paddingVertical: 10,
+                                paddingHorizontal: 20,
+                                marginHorizontal: 4,
+                                marginVertical: 4,
+                            }}>
+
+                            <Text style={{
+                                fontFamily: 'Inter-Regular',
+                                fontSize: 16,
+                                color: person.selected ? '#F5F6FF' : '#1E293B',
+                            }}>{person.firstname}</Text>
+                        </TouchableOpacity>
+                    );
+                })}
+            </View>
         );
     };
 

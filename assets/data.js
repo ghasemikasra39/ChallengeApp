@@ -1,7 +1,7 @@
 export const DATA2 = [
   {
     year: '2021',
-    category: 'chemistry',
+    category: 'Chemistry',
     laureates: [
       {
         id: '1002',
@@ -63,7 +63,7 @@ export const DATA2 = [
   },
   {
     year: '2021',
-    category: 'economics',
+    category: 'Economics',
     laureates: [
       {
         id: '1007',
@@ -113,7 +113,7 @@ export const DATA2 = [
   },
   {
     year: '2021',
-    category: 'literature',
+    category: 'Literature',
     laureates: [
       {
         id: '1004',
@@ -137,7 +137,7 @@ export const DATA2 = [
   },
   {
     year: '2021',
-    category: 'peace',
+    category: 'Peace',
     laureates: [
       {
         id: '1005',
@@ -161,7 +161,7 @@ export const DATA2 = [
   },
   {
     year: '2021',
-    category: 'physics',
+    category: 'Physics',
     overallMotivation:
       '"for groundbreaking contributions to our understanding of complex physical systems"',
     laureates: [
@@ -223,7 +223,7 @@ export const DATA2 = [
   },
   {
     year: '2021',
-    category: 'medicine',
+    category: 'Medicine',
     laureates: [
       {
         id: '997',
