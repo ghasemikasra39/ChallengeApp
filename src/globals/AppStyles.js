@@ -1,3 +1,3 @@
 export const AppStyles = {
-    fontFamily: 'Inter-Regular'
-}
+  fontFamily: 'Inter-Regular',
+};

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
-import HomeScreen from './src/screens/HomeScreen';
+import OnboardingScreen from './src/screens/OnboardingScreen';
 
 const {height} = Dimensions.get('screen');
 
@@ -9,7 +9,7 @@ const App = () => {
   return (
     <View style={styles.container}>
       <View style={styles.center}>
-        <HomeScreen />
+        <OnboardingScreen />
       </View>
     </View>
   );
