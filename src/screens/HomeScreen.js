@@ -17,6 +17,7 @@ import SearchInput from '../components/SearchInput';
 import SelectedItemsList from '../components/selectedItemsList';
 import {AppColors} from '../globals/AppColors';
 import {AppStyles} from '../globals/AppStyles';
+import {downArrow, plusIcon, upArrow} from '../globals/images';
 
 export default function HomeScreen(props) {
     const [searchValue, setSearchValue] = useState();
@@ -53,7 +54,7 @@ export default function HomeScreen(props) {
                         style={{fontWeight: 'bold'}}>{boldSection}</Text>{normalSection}</Text>
                     <Image
                         style={styles.dropdownImage}
-                        source={require('../../assets/icons/plus.png')}
+                        source={plusIcon}
                     />
                 </TouchableOpacity>
             );
@@ -129,7 +130,7 @@ export default function HomeScreen(props) {
 
     const renderAccordionHeader = (item, _, isActive) => {
 
-        const icon = isActive ? require('../../assets/icons/up_4x.png') : require('../../assets/icons/down.png');
+        const icon = isActive ? upArrow : downArrow;
         return (
             <View style={styles.accordionHeaderContainer}>
                 <Text style={styles.accordionHeaderText}>{item.category}</Text>

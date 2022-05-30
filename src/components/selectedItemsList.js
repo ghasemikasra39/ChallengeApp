@@ -2,6 +2,7 @@ import React from 'react';
 import {View, FlatList, TouchableOpacity, Text, Image, StyleSheet} from 'react-native';
 import {AppColors} from '../globals/AppColors';
 import {AppStyles} from '../globals/AppStyles';
+import {crossIcon} from '../globals/images';
 
 export default function SelectedItemsList(props) {
 
@@ -18,7 +19,7 @@ export default function SelectedItemsList(props) {
                 <Text style={styles.text}>{item.firstname}</Text>
                 <Image
                     style={styles.image}
-                    source={require('../../assets/icons/close.png')}
+                    source={crossIcon}
                 />
             </TouchableOpacity>
         );

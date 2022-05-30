@@ -5,13 +5,11 @@ import {AppStyles} from '../globals/AppStyles';
 
 export default function Header(props) {
     return (
-        <View style={{alignItems: 'flex-start', width: 320, alignSelf: 'center'}}>
-            <Text
-                style={styles.title}>
+        <View style={styles.container}>
+            <Text style={styles.title}>
                 Category
             </Text>
-            <Text
-                style={styles.subtitle}>
+            <Text style={styles.subtitle}>
                 Choose a topic best describes you
             </Text>
         </View>
@@ -19,6 +17,7 @@ export default function Header(props) {
 }
 
 const styles = StyleSheet.create({
+    container: {alignItems: 'flex-start', width: 320, alignSelf: 'center'},
     title: {
         fontFamily: AppStyles.fontFamily,
         fontSize: 30,

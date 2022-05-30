@@ -2,6 +2,7 @@ import React from 'react';
 import {View, TextInput, Image, StyleSheet} from 'react-native';
 import {AppColors} from '../globals/AppColors';
 import {AppStyles} from '../globals/AppStyles';
+import {searchIcon, settingIcon} from '../globals/images';
 
 export default function SearchInput(props) {
     const {onChangeTextHandler, searchValue, SearchInputViewRef} = props;
@@ -12,7 +13,7 @@ export default function SearchInput(props) {
             <View style={styles.leftIcon}>
                 <Image
                     style={styles.leftIconImage}
-                    source={require('../../assets/icons/search-normal_4x.png')}
+                    source={searchIcon}
                 />
             </View>
             <View style={styles.textInputContainer}>
@@ -27,7 +28,7 @@ export default function SearchInput(props) {
             <View style={styles.rightIcon}>
                 <Image
                     style={styles.rightIconImage}
-                    source={require('../../assets/icons/Group_4x.png')}
+                    source={settingIcon}
                 />
             </View>
         </View>
