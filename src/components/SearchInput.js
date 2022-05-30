@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, TextInput, Image} from 'react-native';
+import {AppColors} from '../globals/AppColors';
 
 export default function SearchInput(props) {
     const {onChangeTextHander, searchValue, SearchInputViewRef} = props
@@ -10,7 +11,7 @@ export default function SearchInput(props) {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignSelf: 'center',
-                backgroundColor: '#F0F2F4',
+                backgroundColor: AppColors.backgroundLight,
                 width: 327,
                 height: 56,
                 borderRadius: 50,
@@ -25,7 +26,7 @@ export default function SearchInput(props) {
             <View style={{justifyContent: 'center', width: 200}}>
                 <TextInput
                     style={{
-                        color: '#94A3B8',
+                        color: AppColors.lightGray,
                         fontFamily: 'Inter-Regular',
                         fontSize: 16,
                     }}

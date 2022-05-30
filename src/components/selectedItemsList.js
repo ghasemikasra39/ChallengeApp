@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, FlatList, TouchableOpacity, Text, Image} from 'react-native';
+import {AppColors} from '../globals/AppColors';
 
 export default function SelectedItemsList(props) {
 
@@ -15,7 +16,7 @@ export default function SelectedItemsList(props) {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    backgroundColor: '#334155',
+                    backgroundColor: AppColors.gray,
                     height: 32,
                     borderRadius: 50,
                     marginRight: 8,
@@ -23,7 +24,7 @@ export default function SelectedItemsList(props) {
                     paddingHorizontal: 12,
                 }}
                 onPress={onRemoveItem}>
-                <Text style={{fontFamily: 'Inter-Regular', fontSize: 14, color: '#F5F6FF'}}>{item.firstname}</Text>
+                <Text style={{fontFamily: 'Inter-Regular', fontSize: 14, color: AppColors.textLight}}>{item.firstname}</Text>
                 <Image
                     style={{width: 8, height: 8, marginLeft: 10}}
                     source={require('../../assets/icons/close.png')}

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useMemo} from 'react';
 import {
     View,
     Text,
@@ -15,6 +15,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import SearchInput from '../components/SearchInput';
 import SelectedItemsList from '../components/selectedItemsList';
+import {AppColors} from '../globals/AppColors';
 
 export default function HomeScreen(props) {
     const [searchValue, setSearchValue] = useState();
@@ -38,7 +39,7 @@ export default function HomeScreen(props) {
         setDropdownVisible(true);
     };
 
-    const renderDropdown = () => {
+    const Dropdown = useMemo(() => {
 
         const renderItem = ({item}) => {
             const boldSection = item.firstname.substring(0, searchValue.length);
@@ -52,7 +53,7 @@ export default function HomeScreen(props) {
                 <TouchableOpacity
                     style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 14}}
                     onPress={() => onItemPress(item)}>
-                    <Text style={{fontFamily: 'Inter-Regular', color: '#334155', fontSize: 16}}><Text
+                    <Text style={{fontFamily: 'Inter-Regular', color: AppColors.gray, fontSize: 16}}><Text
                         style={{fontWeight: 'bold'}}>{boldSection}</Text>{normalSection}</Text>
                     <Image
                         style={{width: 20, height: 20}}
@@ -80,7 +81,7 @@ export default function HomeScreen(props) {
         } else {
             return <></>;
         }
-    };
+    }, [dropdownData, dropdownTop, dropdownVisible, searchValue]);
 
     const onChangeTextHander = enteredText => {
         setSearchValue(enteredText);
@@ -145,7 +146,7 @@ export default function HomeScreen(props) {
                 alignItems: 'center',
                 marginVertical: 15,
             }}>
-                <Text style={{fontFamily: 'Inter-Regular', fontSize: 16, color: '#1E293B'}}>{item.category}</Text>
+                <Text style={{fontFamily: 'Inter-Regular', fontSize: 16, color: AppColors.textDark}}>{item.category}</Text>
                 <Image
                     style={{width: 20, height: 20}}
                     source={icon}
@@ -171,7 +172,7 @@ export default function HomeScreen(props) {
                             key={person.firstname}
                             onPress={() => onItemPress(person)}
                             style={{
-                                backgroundColor: person.selected ? '#040FD9' : '#F0F2F4',
+                                backgroundColor: person.selected ? AppColors.blue : AppColors.backgroundLight,
                                 borderRadius: 50,
                                 height: 44,
                                 paddingVertical: 10,
@@ -182,7 +183,7 @@ export default function HomeScreen(props) {
                             <Text style={{
                                 fontFamily: 'Inter-Regular',
                                 fontSize: 16,
-                                color: person.selected ? '#F5F6FF' : '#1E293B',
+                                color: person.selected ? AppColors.textLight : AppColors.textDark,
                             }}>{person.firstname}</Text>
                         </TouchableOpacity>
                     );
@@ -223,7 +224,7 @@ export default function HomeScreen(props) {
                 />
             </ScrollView>
             <Footer/>
-            {renderDropdown()}
+            {Dropdown}
         </>
     );
 }
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         width: 326,
         maxHeight: 180,
-        shadowColor: '#314252',
+        shadowColor: AppColors.shadowColor,
         shadowRadius: 20,
         shadowOffset: {height: 10, width: 0},
         shadowOpacity: 0.5,
