@@ -2,7 +2,6 @@ import React, {useState, useEffect, useRef} from 'react';
 import {
     View,
     Text,
-    TextInput,
     Image,
     StyleSheet,
     TouchableOpacity,
@@ -12,6 +11,10 @@ import {
 } from 'react-native';
 import {DATA2} from '../../assets/data';
 import Accordion from 'react-native-collapsible/Accordion';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import SearchInput from '../components/SearchInput';
+import SelectedItemsList from '../components/selectedItemsList';
 
 export default function HomeScreen(props) {
     const [searchValue, setSearchValue] = useState();
@@ -28,10 +31,6 @@ export default function HomeScreen(props) {
         console.log('rawData: ', rawData);
     }, [selectedItems, rawData]);
 
-    const toggleDropdown = () => {
-        dropdownVisible ? setDropdownVisible(false) : openDropdown();
-    };
-
     const openDropdown = () => {
         SearchInputView.current.measure((_fx, _fy, _w, h, _px, py) => {
             setDropdownTop(py + h);
@@ -42,6 +41,8 @@ export default function HomeScreen(props) {
     const renderDropdown = () => {
 
         const renderItem = ({item}) => {
+            const boldSection = item.firstname.substring(0, searchValue.length);
+            const normalSection = item.firstname.substring(searchValue.length);
             const onItemPress = (item) => {
                 setDropdownVisible(false);
                 setSearchValue('');
@@ -51,7 +52,8 @@ export default function HomeScreen(props) {
                 <TouchableOpacity
                     style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 14}}
                     onPress={() => onItemPress(item)}>
-                    <Text style={{fontFamily: 'Inter-Regular', color: '#334155', fontSize: 16}}>{item.firstname}</Text>
+                    <Text style={{fontFamily: 'Inter-Regular', color: '#334155', fontSize: 16}}><Text
+                        style={{fontWeight: 'bold'}}>{boldSection}</Text>{normalSection}</Text>
                     <Image
                         style={{width: 20, height: 20}}
                         source={require('../../assets/icons/plus.png')}
@@ -132,33 +134,6 @@ export default function HomeScreen(props) {
         setSelectedItems(updatedSelectedItems);
     };
 
-    const renderSelectedItems = ({item}) => {
-        const onRemoveItem = () => {
-            removeItem(item);
-        };
-        return (
-            <TouchableOpacity
-                style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    backgroundColor: '#334155',
-                    height: 32,
-                    borderRadius: 50,
-                    marginRight: 8,
-                    paddingVertical: 6,
-                    paddingHorizontal: 12,
-                }}
-                onPress={onRemoveItem}>
-                <Text style={{fontFamily: 'Inter-Regular', fontSize: 14, color: '#F5F6FF'}}>{item.firstname}</Text>
-                <Image
-                    style={{width: 8, height: 8, marginLeft: 10}}
-                    source={require('../../assets/icons/close.png')}
-                />
-            </TouchableOpacity>
-        );
-    };
-
     const renderAccordionHeader = (item, _, isActive) => {
 
         const icon = isActive ? require('../../assets/icons/up_4x.png') : require('../../assets/icons/down.png');
@@ -222,70 +197,19 @@ export default function HomeScreen(props) {
 
     return (
         <>
-            <Text
-                style={{
-                    fontFamily: 'Inter-Regular',
-                    fontSize: 30,
-                    color: '#334155',
-                    paddingBottom: 8,
-                }}>
-                Category
-            </Text>
-            <Text
-                style={{fontFamily: 'Inter-Regular', fontSize: 14, color: '#94A3B8'}}>
-                Choose a topic best describes you
-            </Text>
-            <View
-                ref={SearchInputView}
-                onPress={toggleDropdown}
-                style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignSelf: 'center',
-                    backgroundColor: '#F0F2F4',
-                    width: 327,
-                    height: 56,
-                    borderRadius: 50,
-                    marginTop: 32,
-                }}>
-                <View style={{justifyContent: 'center', paddingLeft: 17}}>
-                    <Image
-                        style={{width: 20, height: 20}}
-                        source={require('../../assets/icons/search-normal_4x.png')}
-                    />
-                </View>
-                <View style={{justifyContent: 'center', width: 200}}>
-                    <TextInput
-                        style={{
-                            color: '#94A3B8',
-                            fontFamily: 'Inter-Regular',
-                            fontSize: 16,
-                        }}
-                        maxLength={20}
-                        onChangeText={onChangeTextHander}
-                        value={searchValue}
-                        placeholder="Type to search"
-                    />
-                </View>
-                <View style={{justifyContent: 'center'}}>
-                    <Image
-                        style={{width: 56, height: 56}}
-                        source={require('../../assets/icons/Group_4x.png')}
-                    />
-                </View>
-            </View>
-            <View>
-                <FlatList
-                    showsHorizontalScrollIndicator={false}
-                    style={{marginTop: 8}}
-                    renderItem={renderSelectedItems}
-                    data={selectedItems}
-                    horizontal
-                />
-            </View>
+            <Header/>
+            <SearchInput
+                onChangeTextHander={onChangeTextHander}
+                searchValue={searchValue}
+                SearchInputViewRef={SearchInputView}
+            />
+            <SelectedItemsList removeItem={removeItem} selectedItems={selectedItems}/>
             <ScrollView
                 contentContainerStyle={{
-                    paddingBottom: Platform.OS === 'ios' ? 100 : Platform.OS === 'web' ? 100 : 180
+                    paddingBottom: Platform.OS === 'ios' ? 100 : Platform.OS === 'web' ? 100 : 180,
+                    paddingHorizontal: 13,
+                    width: 320,
+                    alignSelf: 'center',
                 }}
                 showsVerticalScrollIndicator={false}
             >
@@ -296,64 +220,9 @@ export default function HomeScreen(props) {
                     renderContent={renderAccordionContent}
                     onChange={updateAccordionActiveSection}
                     touchableComponent={TouchableOpacity}
-                    // renderAsFlatList={true}
-                    // containerStyle={{marginBottom: Platform.OS === 'ios' ? 100 : Platform.OS === 'web' ? 40 : 100}}
                 />
             </ScrollView>
-            <View
-                style={{
-                    position: 'absolute',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    bottom: 0,
-                    paddingBottom: Platform.OS === 'ios' ? 40 : Platform.OS === 'web' ? 20 : 100,
-                    left: 0,
-                    right: 0,
-                    borderTopColor: '#F0F2F4',
-                    backgroundColor: 'white',
-                    borderTopWidth: 1,
-                    paddingTop: 16,
-                    paddingHorizontal: 24,
-                }}
-            >
-                <TouchableOpacity
-                    onPress={() => console.log('go back')}
-                    style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        backgroundColor: '#F0F2F4',
-                        borderRadius: 12,
-                        width: 81,
-                        height: 44,
-                        paddingVertical: 6,
-                        paddingHorizontal: 12,
-                    }}>
-                    <Text style={{
-                        fontFamily: 'Inter-Regular',
-                        fontSize: 14,
-                        color: '#1E293B',
-                    }}>Back</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => console.log('Continue')}
-                    style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        backgroundColor: '#040FD9',
-                        borderRadius: 12,
-                        width: 109,
-                        height: 44,
-                        paddingVertical: 6,
-                        paddingHorizontal: 12,
-                    }}>
-                    <Text style={{
-                        fontFamily: 'Inter-Regular',
-                        fontSize: 14,
-                        color: '#FFFFFF',
-                    }}>Continue</Text>
-                </TouchableOpacity>
-            </View>
-
+            <Footer/>
             {renderDropdown()}
         </>
     );
@@ -372,7 +241,5 @@ const styles = StyleSheet.create({
         shadowOffset: {height: 10, width: 0},
         shadowOpacity: 0.5,
         borderRadius: 12,
-        // paddingVertical: 10,
-        // paddingHorizontal: 24,
     },
 });
