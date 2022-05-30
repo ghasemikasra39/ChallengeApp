@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useMemo} from 'react';
+import React, {useState, useRef, useMemo} from 'react';
 import {
     View,
     Text,
@@ -16,6 +16,7 @@ import Footer from '../components/Footer';
 import SearchInput from '../components/SearchInput';
 import SelectedItemsList from '../components/selectedItemsList';
 import {AppColors} from '../globals/AppColors';
+import {AppStyles} from '../globals/AppStyles';
 
 export default function HomeScreen(props) {
     const [searchValue, setSearchValue] = useState();
@@ -26,11 +27,6 @@ export default function HomeScreen(props) {
     const [selectedItems, setSelectedItems] = useState([]);
     const [activeAccordionSections, setActiveAccordionSections] = useState([]);
     const SearchInputView = useRef();
-
-    useEffect(() => {
-        console.log('selectedItems: ', selectedItems);
-        console.log('rawData: ', rawData);
-    }, [selectedItems, rawData]);
 
     const openDropdown = () => {
         SearchInputView.current.measure((_fx, _fy, _w, h, _px, py) => {
@@ -51,12 +47,12 @@ export default function HomeScreen(props) {
             };
             return (
                 <TouchableOpacity
-                    style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 14}}
+                    style={styles.dropdownContainer}
                     onPress={() => onItemPress(item)}>
-                    <Text style={{fontFamily: 'Inter-Regular', color: AppColors.gray, fontSize: 16}}><Text
+                    <Text style={styles.dropdownText}><Text
                         style={{fontWeight: 'bold'}}>{boldSection}</Text>{normalSection}</Text>
                     <Image
-                        style={{width: 20, height: 20}}
+                        style={styles.dropdownImage}
                         source={require('../../assets/icons/plus.png')}
                     />
                 </TouchableOpacity>
@@ -71,10 +67,7 @@ export default function HomeScreen(props) {
                     <FlatList
                         renderItem={renderItem}
                         data={dropdownData}
-                        style={{
-                            paddingVertical: 10,
-                            paddingHorizontal: 24,
-                        }}
+                        style={styles.dropdownFlatList}
                     />
                 </TouchableOpacity>
             );
@@ -83,7 +76,7 @@ export default function HomeScreen(props) {
         }
     }, [dropdownData, dropdownTop, dropdownVisible, searchValue]);
 
-    const onChangeTextHander = enteredText => {
+    const onChangeTextHandler = enteredText => {
         setSearchValue(enteredText);
         let dataFiltered = [];
         rawData.forEach(data => {
@@ -102,7 +95,6 @@ export default function HomeScreen(props) {
         } else {
             setDropdownVisible(false);
         }
-        console.log(dataSorted);
     };
 
     const addItem = (itemToAdd) => {
@@ -139,16 +131,10 @@ export default function HomeScreen(props) {
 
         const icon = isActive ? require('../../assets/icons/up_4x.png') : require('../../assets/icons/down.png');
         return (
-            <View style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                height: 44,
-                alignItems: 'center',
-                marginVertical: 15,
-            }}>
-                <Text style={{fontFamily: 'Inter-Regular', fontSize: 16, color: AppColors.textDark}}>{item.category}</Text>
+            <View style={styles.accordionHeaderContainer}>
+                <Text style={styles.accordionHeaderText}>{item.category}</Text>
                 <Image
-                    style={{width: 20, height: 20}}
+                    style={styles.accordionHeaderImage}
                     source={icon}
                 />
             </View>
@@ -165,26 +151,15 @@ export default function HomeScreen(props) {
         };
 
         return (
-            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+            <View style={styles.accordionContentContainer}>
                 {categoryItem.laureates.map(person => {
                     return (
                         <TouchableOpacity
                             key={person.firstname}
                             onPress={() => onItemPress(person)}
-                            style={{
-                                backgroundColor: person.selected ? AppColors.blue : AppColors.backgroundLight,
-                                borderRadius: 50,
-                                height: 44,
-                                paddingVertical: 10,
-                                paddingHorizontal: 20,
-                                marginHorizontal: 4,
-                                marginVertical: 4,
-                            }}>
-                            <Text style={{
-                                fontFamily: 'Inter-Regular',
-                                fontSize: 16,
-                                color: person.selected ? AppColors.textLight : AppColors.textDark,
-                            }}>{person.firstname}</Text>
+                            style={[styles.accordionItemContainer, {backgroundColor: person.selected ? AppColors.blue : AppColors.backgroundLight}]}>
+                            <Text
+                                style={[styles.accordionItemText, {color: person.selected ? AppColors.textLight : AppColors.textDark}]}>{person.firstname}</Text>
                         </TouchableOpacity>
                     );
                 })}
@@ -200,18 +175,13 @@ export default function HomeScreen(props) {
         <>
             <Header/>
             <SearchInput
-                onChangeTextHander={onChangeTextHander}
+                onChangeTextHandler={onChangeTextHandler}
                 searchValue={searchValue}
                 SearchInputViewRef={SearchInputView}
             />
             <SelectedItemsList removeItem={removeItem} selectedItems={selectedItems}/>
             <ScrollView
-                contentContainerStyle={{
-                    paddingBottom: Platform.OS === 'ios' ? 100 : Platform.OS === 'web' ? 100 : 180,
-                    paddingHorizontal: 13,
-                    width: 320,
-                    alignSelf: 'center',
-                }}
+                contentContainerStyle={styles.scrollViewContentContainerStyle}
                 showsVerticalScrollIndicator={false}
             >
                 <Accordion
@@ -242,5 +212,44 @@ const styles = StyleSheet.create({
         shadowOffset: {height: 10, width: 0},
         shadowOpacity: 0.5,
         borderRadius: 12,
+    },
+    scrollViewContentContainerStyle: {
+        paddingBottom: Platform.OS === 'ios' ? 100 : Platform.OS === 'web' ? 100 : 180,
+        paddingHorizontal: 13,
+        width: 320,
+        alignSelf: 'center',
+    },
+    dropdownContainer: {flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 14},
+    dropdownFlatList: {
+        paddingVertical: 10,
+        paddingHorizontal: 24,
+    },
+    dropdownImage: {width: 20, height: 20},
+    dropdownText: {fontFamily: AppStyles.fontFamily, color: AppColors.gray, fontSize: 16},
+    accordionHeaderContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        height: 44,
+        alignItems: 'center',
+        marginVertical: 15,
+    },
+    accordionHeaderText: {
+        fontFamily: AppStyles.fontFamily,
+        fontSize: 16,
+        color: AppColors.textDark,
+    },
+    accordionHeaderImage: {width: 20, height: 20},
+    accordionContentContainer: {flexDirection: 'row', flexWrap: 'wrap'},
+    accordionItemContainer: {
+        borderRadius: 50,
+        height: 44,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        marginHorizontal: 4,
+        marginVertical: 4,
+    },
+    accordionItemText: {
+        fontFamily: AppStyles.fontFamily,
+        fontSize: 16,
     },
 });

@@ -1,10 +1,11 @@
 import React from 'react';
-import {View, FlatList, TouchableOpacity, Text, Image} from 'react-native';
+import {View, FlatList, TouchableOpacity, Text, Image, StyleSheet} from 'react-native';
 import {AppColors} from '../globals/AppColors';
+import {AppStyles} from '../globals/AppStyles';
 
 export default function SelectedItemsList(props) {
 
-    const {removeItem, selectedItems} = props
+    const {removeItem, selectedItems} = props;
 
     const renderSelectedItems = ({item}) => {
         const onRemoveItem = () => {
@@ -12,21 +13,11 @@ export default function SelectedItemsList(props) {
         };
         return (
             <TouchableOpacity
-                style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    backgroundColor: AppColors.gray,
-                    height: 32,
-                    borderRadius: 50,
-                    marginRight: 8,
-                    paddingVertical: 6,
-                    paddingHorizontal: 12,
-                }}
+                style={styles.container}
                 onPress={onRemoveItem}>
-                <Text style={{fontFamily: 'Inter-Regular', fontSize: 14, color: AppColors.textLight}}>{item.firstname}</Text>
+                <Text style={styles.text}>{item.firstname}</Text>
                 <Image
-                    style={{width: 8, height: 8, marginLeft: 10}}
+                    style={styles.image}
                     source={require('../../assets/icons/close.png')}
                 />
             </TouchableOpacity>
@@ -37,12 +28,29 @@ export default function SelectedItemsList(props) {
         <View>
             <FlatList
                 showsHorizontalScrollIndicator={false}
-                style={{marginTop: 8, alignSelf: 'center', width: 320}}
+                style={styles.flatList}
                 contentContainerStyle={{justifyContent: 'flex-start'}}
                 renderItem={renderSelectedItems}
                 data={selectedItems}
                 horizontal
             />
         </View>
-    )
+    );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: AppColors.gray,
+        height: 32,
+        borderRadius: 50,
+        marginRight: 8,
+        paddingVertical: 6,
+        paddingHorizontal: 12,
+    },
+    text: {fontFamily: AppStyles.fontFamily, fontSize: 14, color: AppColors.textLight},
+    image: {width: 8, height: 8, marginLeft: 10},
+    flatList: {marginTop: 8, alignSelf: 'center', width: 320},
+});
