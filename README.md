@@ -3,7 +3,7 @@
 ### Prerequisities
 
 - Make sure that you have the latest version of `Xcode`, `Android Studio`, `nodeJS`, `cocoapods`, `TypeScript` installed.
-- Make sure you have access to the internet as the data is received via an external source for realism.
+- Make sure you have access to the internet as the data is received via an external source for realism. For a simple test, make sure that you can access https://6296455175c34f1f3b2cb120.mockapi.io/data url using your browser/postman. This is the only external api that is used to fetch the data. If this endpoint is not reachable, the app will not work.
 
 ### Installation
 
