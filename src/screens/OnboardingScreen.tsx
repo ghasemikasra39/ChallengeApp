@@ -11,6 +11,7 @@ import {
   ScrollView,
   Animated,
   Easing,
+  Dimensions,
 } from 'react-native';
 import {DATA, dataInterface, laureatesInterface} from '../../assets/data';
 import Accordion from 'react-native-collapsible/Accordion';
@@ -21,6 +22,8 @@ import SelectedItemsList from '../components/selectedItemsList';
 import {AppColors} from '../globals/AppColors';
 import {AppStyles} from '../globals/AppStyles';
 import {downArrow, plusIcon, upArrow} from '../globals/images';
+
+const {height} = Dimensions.get('screen');
 
 const OnboardingScreen: FC = () => {
   const fadeAnim = useRef<any>(new Animated.Value(0)).current;
@@ -104,18 +107,26 @@ const OnboardingScreen: FC = () => {
 
     if (dropdownVisible) {
       return (
-        <TouchableOpacity>
+        <Animated.View
+          style={[styles.dropdown, {opacity: fadeAnim, top: dropdownTop}]}>
           <FlatList
             renderItem={renderItem}
             data={dropdownData}
             style={styles.dropdownFlatList}
           />
-        </TouchableOpacity>
+        </Animated.View>
       );
     } else {
       return <></>;
     }
-  }, [addItem, dropdownData, dropdownVisible, searchValue.length]);
+  }, [
+    addItem,
+    dropdownData,
+    dropdownVisible,
+    searchValue.length,
+    dropdownTop,
+    fadeAnim,
+  ]);
 
   const onChangeTextHandler = (enteredText: string) => {
     setSearchValue(enteredText);
@@ -223,7 +234,13 @@ const OnboardingScreen: FC = () => {
   };
 
   return (
-    <>
+    <View
+      style={{
+        paddingTop: 48,
+        paddingHorizontal: 24,
+        height,
+        backgroundColor: AppColors.white,
+      }}>
       <Header />
       <SearchInput
         onChangeTextHandler={onChangeTextHandler}
@@ -247,11 +264,8 @@ const OnboardingScreen: FC = () => {
         />
       </ScrollView>
       <Footer />
-      <Animated.View
-        style={[styles.dropdown, {top: dropdownTop, opacity: fadeAnim}]}>
-        {Dropdown}
-      </Animated.View>
-    </>
+      {Dropdown}
+    </View>
   );
 };
 
@@ -270,6 +284,7 @@ const styles = StyleSheet.create({
     shadowOffset: {height: 10, width: 0},
     shadowOpacity: 0.5,
     borderRadius: 12,
+    elevation: 12,
   },
   scrollViewContentContainerStyle: {
     paddingBottom:
