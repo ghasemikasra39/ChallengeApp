@@ -1,4 +1,19 @@
-export const DATA2 = [
+export interface dataInterface {
+  year: string;
+  category: string;
+  laureates: laureatesInterface[];
+}
+
+export interface laureatesInterface {
+  id: string;
+  firstname: string;
+  surname: string;
+  motivation: string;
+  share: string;
+  selected: boolean;
+}
+
+export const DATA: dataInterface[] = [
   {
     year: '2021',
     category: 'Chemistry',
@@ -9,7 +24,7 @@ export const DATA2 = [
         surname: 'List',
         motivation: '"for the development of asymmetric organocatalysis"',
         share: '2',
-        selected: false
+        selected: false,
       },
       {
         id: '1003',
@@ -17,7 +32,7 @@ export const DATA2 = [
         surname: 'MacMillan',
         motivation: '"for the development of asymmetric organocatalysis"',
         share: '2',
-        selected: false
+        selected: false,
       },
       {
         id: '991',
@@ -25,7 +40,7 @@ export const DATA2 = [
         surname: 'Charpentier',
         motivation: '"for the development of a method for genome editing"',
         share: '2',
-        selected: false
+        selected: false,
       },
       {
         id: '992',
@@ -33,7 +48,7 @@ export const DATA2 = [
         surname: 'Doudna',
         motivation: '"for the development of a method for genome editing"',
         share: '2',
-        selected: false
+        selected: false,
       },
       {
         id: '976',
@@ -41,7 +56,7 @@ export const DATA2 = [
         surname: 'Goodenough',
         motivation: '"for the development of lithium-ion batteries"',
         share: '3',
-        selected: false
+        selected: false,
       },
       {
         id: '977',
@@ -49,7 +64,7 @@ export const DATA2 = [
         surname: 'Whittingham',
         motivation: '"for the development of lithium-ion batteries"',
         share: '3',
-        selected: false
+        selected: false,
       },
       {
         id: '978',
@@ -57,7 +72,7 @@ export const DATA2 = [
         surname: 'Yoshino',
         motivation: '"for the development of lithium-ion batteries"',
         share: '3',
-        selected: false
+        selected: false,
       },
     ],
   },
@@ -71,7 +86,7 @@ export const DATA2 = [
         surname: 'Card',
         motivation: '"for his empirical contributions to labour economics"',
         share: '2',
-        selected: false
+        selected: false,
       },
       {
         id: '1008',
@@ -80,7 +95,7 @@ export const DATA2 = [
         motivation:
           '"for their methodological contributions to the analysis of causal relationships"',
         share: '4',
-        selected: false
+        selected: false,
       },
       {
         id: '1009',
@@ -89,25 +104,25 @@ export const DATA2 = [
         motivation:
           '"for their methodological contributions to the analysis of causal relationships"',
         share: '4',
-        selected: false
+        selected: false,
       },
       {
         id: '995',
         firstname: 'Paul',
         surname: 'Milgrom',
         motivation:
-            '"for improvements to auction theory and inventions of new auction formats"',
+          '"for improvements to auction theory and inventions of new auction formats"',
         share: '2',
-        selected: false
+        selected: false,
       },
       {
         id: '996',
         firstname: 'Robert',
         surname: 'Wilson',
         motivation:
-            '"for improvements to auction theory and inventions of new auction formats"',
+          '"for improvements to auction theory and inventions of new auction formats"',
         share: '2',
-        selected: false
+        selected: false,
       },
     ],
   },
@@ -122,16 +137,16 @@ export const DATA2 = [
         motivation:
           '"for his uncompromising and compassionate penetration of the effects of colonialism and the fate of the refugee in the gulf between cultures and continents"',
         share: '1',
-        selected: false
+        selected: false,
       },
       {
         id: '993',
         firstname: 'Louise',
         surname: 'Glück',
         motivation:
-            '"for her unmistakable poetic voice that with austere beauty makes individual existence universal"',
+          '"for her unmistakable poetic voice that with austere beauty makes individual existence universal"',
         share: '1',
-        selected: false
+        selected: false,
       },
     ],
   },
@@ -146,7 +161,7 @@ export const DATA2 = [
         motivation:
           '"for their efforts to safeguard freedom of expression, which is a precondition for democracy and lasting peace"',
         share: '2',
-        selected: false
+        selected: false,
       },
       {
         id: '1006',
@@ -155,15 +170,13 @@ export const DATA2 = [
         motivation:
           '"for their efforts to safeguard freedom of expression, which is a precondition for democracy and lasting peace"',
         share: '2',
-        selected: false
+        selected: false,
       },
     ],
   },
   {
     year: '2021',
     category: 'Physics',
-    overallMotivation:
-      '"for groundbreaking contributions to our understanding of complex physical systems"',
     laureates: [
       {
         id: '999',
@@ -172,7 +185,7 @@ export const DATA2 = [
         motivation:
           '"for the physical modelling of Earth’s climate, quantifying variability and reliably predicting global warming"',
         share: '4',
-        selected: false
+        selected: false,
       },
       {
         id: '1000',
@@ -181,7 +194,7 @@ export const DATA2 = [
         motivation:
           '"for the physical modelling of Earth’s climate, quantifying variability and reliably predicting global warming"',
         share: '4',
-        selected: false
+        selected: false,
       },
       {
         id: '1001',
@@ -190,34 +203,34 @@ export const DATA2 = [
         motivation:
           '"for the discovery of the interplay of disorder and fluctuations in physical systems from atomic to planetary scales"',
         share: '2',
-        selected: false
+        selected: false,
       },
       {
         id: '988',
         firstname: 'Roger',
         surname: 'Penrose',
         motivation:
-            '"for the discovery that black hole formation is a robust prediction of the general theory of relativity"',
+          '"for the discovery that black hole formation is a robust prediction of the general theory of relativity"',
         share: '2',
-        selected: false
+        selected: false,
       },
       {
         id: '989',
         firstname: 'Reinhard',
         surname: 'Genzel',
         motivation:
-            '"for the discovery of a supermassive compact object at the centre of our galaxy"',
+          '"for the discovery of a supermassive compact object at the centre of our galaxy"',
         share: '4',
-        selected: false
+        selected: false,
       },
       {
         id: '990',
         firstname: 'Andrea',
         surname: 'Ghez',
         motivation:
-            '"for the discovery of a supermassive compact object at the centre of our galaxy"',
+          '"for the discovery of a supermassive compact object at the centre of our galaxy"',
         share: '4',
-        selected: false
+        selected: false,
       },
     ],
   },
@@ -232,7 +245,7 @@ export const DATA2 = [
         motivation:
           '"for their discoveries of receptors for temperature and touch"',
         share: '2',
-        selected: false
+        selected: false,
       },
       {
         id: '998',
@@ -241,7 +254,7 @@ export const DATA2 = [
         motivation:
           '"for their discoveries of receptors for temperature and touch"',
         share: '2',
-        selected: false
+        selected: false,
       },
     ],
   },

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {
   View,
   FlatList,
@@ -10,11 +10,17 @@ import {
 import {AppColors} from '../globals/AppColors';
 import {AppStyles} from '../globals/AppStyles';
 import {crossIcon} from '../globals/images';
+import {laureatesInterface} from '../../assets/data';
 
-export default function SelectedItemsList(props) {
+interface Props {
+  removeItem: (item: laureatesInterface) => void;
+  selectedItems: laureatesInterface[];
+}
+
+const SelectedItemsList: FC<Props> = props => {
   const {removeItem, selectedItems} = props;
 
-  const renderSelectedItems = ({item}) => {
+  const renderSelectedItems = ({item}: {item: laureatesInterface}) => {
     const onRemoveItem = () => {
       removeItem(item);
     };
@@ -38,7 +44,9 @@ export default function SelectedItemsList(props) {
       />
     </View>
   );
-}
+};
+
+export default SelectedItemsList;
 
 const styles = StyleSheet.create({
   container: {

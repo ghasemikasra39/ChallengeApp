@@ -1,4 +1,5 @@
-import React, {useState, useRef, useMemo} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {FC, useState, useRef, useMemo} from 'react';
 import {
   View,
   Text,
@@ -9,7 +10,7 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import {DATA2} from '../../assets/data';
+import {DATA, dataInterface, laureatesInterface} from '../../assets/data';
 import Accordion from 'react-native-collapsible/Accordion';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -18,16 +19,17 @@ import SelectedItemsList from '../components/selectedItemsList';
 import {AppColors} from '../globals/AppColors';
 import {AppStyles} from '../globals/AppStyles';
 import {downArrow, plusIcon, upArrow} from '../globals/images';
-
-export default function OnboardingScreen(props) {
-  const [searchValue, setSearchValue] = useState();
-  const [rawData, setRawData] = useState(DATA2);
-  const [dropdownVisible, setDropdownVisible] = useState(false);
-  const [dropdownTop, setDropdownTop] = useState(0);
-  const [dropdownData, setDropdownData] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [activeAccordionSections, setActiveAccordionSections] = useState([]);
-  const SearchInputView = useRef();
+const OnboardingScreen: FC = () => {
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [rawData, setRawData] = useState<dataInterface[]>(DATA);
+  const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
+  const [dropdownTop, setDropdownTop] = useState<number>(0);
+  const [dropdownData, setDropdownData] = useState<laureatesInterface[]>([]);
+  const [selectedItems, setSelectedItems] = useState<laureatesInterface[]>([]);
+  const [activeAccordionSections, setActiveAccordionSections] = useState<
+    number[]
+  >([]);
+  const SearchInputView = useRef<View>();
 
   const openDropdown = () => {
     SearchInputView.current.measure((_fx, _fy, _w, h, _px, py) => {
@@ -36,14 +38,31 @@ export default function OnboardingScreen(props) {
     setDropdownVisible(true);
   };
 
+  const addItem = (itemToAdd: laureatesInterface) => {
+    setSelectedItems(prevState => [...prevState, itemToAdd]);
+    const rawDataUpdated: dataInterface[] = [];
+    rawData.forEach(data => {
+      const updatedLaureates = data.laureates.map(person =>
+        person.firstname === itemToAdd.firstname
+          ? {
+              ...person,
+              selected: true,
+            }
+          : person,
+      );
+      rawDataUpdated.push({...data, laureates: updatedLaureates});
+    });
+    setRawData(rawDataUpdated);
+  };
+
   const Dropdown = useMemo(() => {
-    const renderItem = ({item}) => {
+    const renderItem = ({item}: {item: laureatesInterface}) => {
       const boldSection = item.firstname.substring(0, searchValue.length);
       const normalSection = item.firstname.substring(searchValue.length);
-      const onItemPress = item => {
+      const onItemPress = (itemPressed: laureatesInterface) => {
         setDropdownVisible(false);
         setSearchValue('');
-        addItem(item);
+        addItem(itemPressed);
       };
       return (
         <TouchableOpacity
@@ -73,11 +92,11 @@ export default function OnboardingScreen(props) {
     } else {
       return <></>;
     }
-  }, [dropdownData, dropdownTop, dropdownVisible, searchValue]);
+  }, [addItem, dropdownData, dropdownTop, dropdownVisible, searchValue.length]);
 
-  const onChangeTextHandler = enteredText => {
+  const onChangeTextHandler = (enteredText: string) => {
     setSearchValue(enteredText);
-    let dataFiltered = [];
+    let dataFiltered: laureatesInterface[] = [];
     rawData.forEach(data => {
       const res = data.laureates.filter(
         person =>
@@ -99,25 +118,8 @@ export default function OnboardingScreen(props) {
     }
   };
 
-  const addItem = itemToAdd => {
-    setSelectedItems(prevState => [...prevState, itemToAdd]);
-    const rawDataUpdated = [];
-    rawData.forEach(data => {
-      const updatedLaureates = data.laureates.map(person =>
-        person.firstname === itemToAdd.firstname
-          ? {
-              ...person,
-              selected: true,
-            }
-          : person,
-      );
-      rawDataUpdated.push({...data, laureates: updatedLaureates});
-    });
-    setRawData(rawDataUpdated);
-  };
-
-  const removeItem = itemToRemove => {
-    const rawDataUpdated = [];
+  const removeItem = (itemToRemove: laureatesInterface) => {
+    const rawDataUpdated: dataInterface[] = [];
     rawData.forEach(data => {
       const updatedLaureates = data.laureates.map(person =>
         person.firstname === itemToRemove.firstname
@@ -137,7 +139,11 @@ export default function OnboardingScreen(props) {
     setSelectedItems(updatedSelectedItems);
   };
 
-  const renderAccordionHeader = (item, _, isActive) => {
+  const renderAccordionHeader = (
+    item: dataInterface,
+    _: number,
+    isActive: boolean,
+  ) => {
     const icon = isActive ? upArrow : downArrow;
     return (
       <View style={styles.accordionHeaderContainer}>
@@ -147,8 +153,8 @@ export default function OnboardingScreen(props) {
     );
   };
 
-  const renderAccordionContent = (categoryItem, _, isActive) => {
-    const onItemPress = person => {
+  const renderAccordionContent = (categoryItem: dataInterface) => {
+    const onItemPress = (person: laureatesInterface) => {
       if (person.selected) {
         removeItem(person);
       } else {
@@ -189,7 +195,7 @@ export default function OnboardingScreen(props) {
     );
   };
 
-  const updateAccordionActiveSection = sections => {
+  const updateAccordionActiveSection = (sections: number[]) => {
     setActiveAccordionSections(sections.includes(undefined) ? [] : sections);
   };
 
@@ -221,7 +227,9 @@ export default function OnboardingScreen(props) {
       {Dropdown}
     </>
   );
-}
+};
+
+export default OnboardingScreen;
 
 const styles = StyleSheet.create({
   dropdown: {

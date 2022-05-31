@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {View, Text, TouchableOpacity, Platform, StyleSheet} from 'react-native';
 import {AppColors} from '../globals/AppColors';
 import {AppStyles} from '../globals/AppStyles';
 
-export default function Footer(props) {
+const Footer: FC = () => {
   return (
     <View style={styles.container}>
       <View style={styles.buttonsContainer}>
@@ -20,7 +20,9 @@ export default function Footer(props) {
       </View>
     </View>
   );
-}
+};
+
+export default Footer;
 
 const styles = StyleSheet.create({
   container: {

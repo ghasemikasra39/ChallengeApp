@@ -1,10 +1,16 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {View, TextInput, Image, StyleSheet} from 'react-native';
 import {AppColors} from '../globals/AppColors';
 import {AppStyles} from '../globals/AppStyles';
 import {searchIcon, settingIcon} from '../globals/images';
 
-export default function SearchInput(props) {
+interface Props {
+  onChangeTextHandler: (text: String) => void;
+  searchValue: string;
+  SearchInputViewRef: any;
+}
+
+const SearchInput: FC<Props> = props => {
   const {onChangeTextHandler, searchValue, SearchInputViewRef} = props;
   return (
     <View ref={SearchInputViewRef} style={styles.container}>
@@ -25,7 +31,9 @@ export default function SearchInput(props) {
       </View>
     </View>
   );
-}
+};
+
+export default SearchInput;
 
 const styles = StyleSheet.create({
   container: {
