@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {FC, useState, useRef, useMemo} from 'react';
+import React, {FC, useState, useRef, useMemo, useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,8 @@ import {
   FlatList,
   Platform,
   ScrollView,
+  Animated,
+  Easing,
 } from 'react-native';
 import {DATA, dataInterface, laureatesInterface} from '../../assets/data';
 import Accordion from 'react-native-collapsible/Accordion';
@@ -19,7 +21,9 @@ import SelectedItemsList from '../components/selectedItemsList';
 import {AppColors} from '../globals/AppColors';
 import {AppStyles} from '../globals/AppStyles';
 import {downArrow, plusIcon, upArrow} from '../globals/images';
+
 const OnboardingScreen: FC = () => {
+  const fadeAnim = useRef<any>(new Animated.Value(0)).current;
   const [searchValue, setSearchValue] = useState<string>('');
   const [rawData, setRawData] = useState<dataInterface[]>(DATA);
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
@@ -31,11 +35,33 @@ const OnboardingScreen: FC = () => {
   >([]);
   const SearchInputView = useRef<View>();
 
+  useEffect(() => {
+    setTimeout(() => {
+      SearchInputView.current.measure((_fx, _fy, _w, h, _px, py) => {
+        console.log('py + h: ', py + h);
+        setDropdownTop(py + h);
+      });
+    }, 500);
+  }, []);
+
   const openDropdown = () => {
-    SearchInputView.current.measure((_fx, _fy, _w, h, _px, py) => {
-      setDropdownTop(py + h);
-    });
     setDropdownVisible(true);
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 200,
+      easing: Easing.ease,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const closeDropdown = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 0,
+      useNativeDriver: true,
+    }).start(() => {
+      setDropdownVisible(false);
+    });
   };
 
   const addItem = (itemToAdd: laureatesInterface) => {
@@ -60,7 +86,7 @@ const OnboardingScreen: FC = () => {
       const boldSection = item.firstname.substring(0, searchValue.length);
       const normalSection = item.firstname.substring(searchValue.length);
       const onItemPress = (itemPressed: laureatesInterface) => {
-        setDropdownVisible(false);
+        closeDropdown();
         setSearchValue('');
         addItem(itemPressed);
       };
@@ -79,9 +105,7 @@ const OnboardingScreen: FC = () => {
 
     if (dropdownVisible) {
       return (
-        <TouchableOpacity
-          onPress={() => setDropdownVisible(false)}
-          style={[styles.dropdown, {top: dropdownTop}]}>
+        <TouchableOpacity>
           <FlatList
             renderItem={renderItem}
             data={dropdownData}
@@ -92,7 +116,7 @@ const OnboardingScreen: FC = () => {
     } else {
       return <></>;
     }
-  }, [addItem, dropdownData, dropdownTop, dropdownVisible, searchValue.length]);
+  }, [addItem, dropdownData, dropdownVisible, searchValue.length]);
 
   const onChangeTextHandler = (enteredText: string) => {
     setSearchValue(enteredText);
@@ -114,7 +138,7 @@ const OnboardingScreen: FC = () => {
     if (enteredText && dataSorted.length) {
       openDropdown();
     } else {
-      setDropdownVisible(false);
+      closeDropdown();
     }
   };
 
@@ -224,7 +248,10 @@ const OnboardingScreen: FC = () => {
         />
       </ScrollView>
       <Footer />
-      {Dropdown}
+      <Animated.View
+        style={[styles.dropdown, {top: dropdownTop, opacity: fadeAnim}]}>
+        {Dropdown}
+      </Animated.View>
     </>
   );
 };
