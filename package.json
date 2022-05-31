@@ -11,11 +11,14 @@
     "web": "cd web && webpack-dev-server --mode development --config webpack.config.js --hot --open"
   },
   "dependencies": {
+    "@react-navigation/native": "^6.0.10",
     "@types/react": "^18.0.9",
     "react": "17.0.2",
     "react-dom": "^17.0.2",
     "react-native": "0.68.2",
     "react-native-collapsible": "^1.6.0",
+    "react-native-safe-area-context": "^4.2.5",
+    "react-native-screens": "^3.13.1",
     "react-native-typescript-transformer": "^1.2.13",
     "react-native-web": "^0.17.7",
     "ts-loader": "^9.3.0"

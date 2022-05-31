@@ -38,7 +38,6 @@ const OnboardingScreen: FC = () => {
   useEffect(() => {
     setTimeout(() => {
       SearchInputView.current.measure((_fx, _fy, _w, h, _px, py) => {
-        console.log('py + h: ', py + h);
         setDropdownTop(py + h);
       });
     }, 500);

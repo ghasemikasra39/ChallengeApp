@@ -1,17 +1,19 @@
 import React from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
 import OnboardingScreen from './src/screens/OnboardingScreen';
 
 const {height} = Dimensions.get('screen');
 
-console.log('some console here');
 const App = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.center}>
-        <OnboardingScreen />
+    <NavigationContainer>
+      <View style={styles.container}>
+        <View style={styles.center}>
+          <OnboardingScreen />
+        </View>
       </View>
-    </View>
+    </NavigationContainer>
   );
 };
 
