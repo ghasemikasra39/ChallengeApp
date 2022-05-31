@@ -42,6 +42,9 @@ const OnboardingScreen: FC<Props> = props => {
   >([]);
   const SearchInputView = useRef<View>();
 
+  /**
+   * A workaround to avoid the initial displacement of the dropdown.
+   */
   useEffect(() => {
     setTimeout(() => {
       SearchInputView.current.measure((_fx, _fy, _w, h, _px, py) => {
@@ -50,6 +53,9 @@ const OnboardingScreen: FC<Props> = props => {
     }, 500);
   }, []);
 
+  /**
+   * Makes the dropdown appear on the screen in a fading animated way
+   */
   const openDropdown = () => {
     setDropdownVisible(true);
     Animated.timing(fadeAnim, {
@@ -60,6 +66,9 @@ const OnboardingScreen: FC<Props> = props => {
     }).start();
   };
 
+  /**
+   * Makes the dropdown disappear from the screen without any animation
+   */
   const closeDropdown = () => {
     Animated.timing(fadeAnim, {
       toValue: 0,
@@ -70,6 +79,14 @@ const OnboardingScreen: FC<Props> = props => {
     });
   };
 
+  /**
+   * Adds a new item to the set of user selected items.
+   * An item can be added using either the search mechanism
+   * or the accordion mechanism. The selected items must not appear
+   * in the search result, therefore, we find and remove it from our raw data.
+   *
+   * @param itemToAdd - the item to be added to the set of selected items
+   */
   const addItem = (itemToAdd: laureatesInterface) => {
     setSelectedItems(prevState => [...prevState, itemToAdd]);
     const rawDataUpdated: dataInterface[] = [];
@@ -87,6 +104,9 @@ const OnboardingScreen: FC<Props> = props => {
     setRawData(rawDataUpdated);
   };
 
+  /**
+   * The memoized dropdown for performance boost. Renders the entire dropdown.
+   */
   const Dropdown = useMemo(() => {
     const renderItem = ({item}: {item: laureatesInterface}) => {
       const boldSection = item.firstname.substring(0, searchValue.length);
@@ -133,6 +153,13 @@ const OnboardingScreen: FC<Props> = props => {
     fadeAnim,
   ]);
 
+  /**
+   * Handles search input change text. The result shown in the dropdown list
+   * contains the items in which the searched string presents. The data is
+   * also sorted alphabetically.
+   *
+   * @param enteredText - string entered into the search input
+   */
   const onChangeTextHandler = (enteredText: string) => {
     setSearchValue(enteredText);
     let dataFiltered: laureatesInterface[] = [];
@@ -157,6 +184,13 @@ const OnboardingScreen: FC<Props> = props => {
     }
   };
 
+  /**
+   * Removes an item from the set of user selected items. The raw data must
+   * also be updated, so that the removed item will appear in the subsequent
+   * search queries.
+   *
+   * @param itemToRemove - the item to be removed
+   */
   const removeItem = (itemToRemove: laureatesInterface) => {
     const rawDataUpdated: dataInterface[] = [];
     rawData.forEach(data => {
@@ -178,6 +212,16 @@ const OnboardingScreen: FC<Props> = props => {
     setSelectedItems(updatedSelectedItems);
   };
 
+  /**
+   * Renders the header section (the title and the arrow icon) of each row of
+   * the Accordion.
+   *
+   * @param item - data object to be used as the header section
+   * @param _ - item index (not used in our case, but is presented to avoid syntax error)
+   * @param isActive - is true if this row of Accordion is currently open, false otherwise
+   *
+   * @returns <ReactElement> - a header row of the Accordion
+   */
   const renderAccordionHeader = (
     item: dataInterface,
     _: number,
@@ -192,6 +236,14 @@ const OnboardingScreen: FC<Props> = props => {
     );
   };
 
+  /**
+   * Renders the content of each row of Accordion. The appearance of the items
+   * will vary based on the fact that if they are already selected or not
+   *
+   * @param categoryItem - data object to be used as the content section
+   *
+   * @returns <ReactElement> - a content row for a row of Accordion
+   */
   const renderAccordionContent = (categoryItem: dataInterface) => {
     const onItemPress = (person: laureatesInterface) => {
       if (person.selected) {
@@ -234,6 +286,12 @@ const OnboardingScreen: FC<Props> = props => {
     );
   };
 
+  /**
+   * Keeps track of which Accordion row(s) are currently open. This method is
+   * needed for the internal mechanisms of the library.
+   *
+   * @param sections - indices of the open rows of the Accordion
+   */
   const updateAccordionActiveSection = (sections: number[]) => {
     setActiveAccordionSections(sections.includes(undefined) ? [] : sections);
   };
