@@ -108,14 +108,29 @@ const OnboardingScreen: FC<Props> = props => {
    * The memoized dropdown for performance boost. Renders the entire dropdown.
    */
   const Dropdown = useMemo(() => {
+    /**
+     * Renders a single row of the dropdown.
+     *
+     * @param item - item to be rendered
+     * @returns <ReactElement>
+     */
     const renderItem = ({item}: {item: laureatesInterface}) => {
-      const boldSection = item.firstname.substring(0, searchValue.length);
-      const normalSection = item.firstname.substring(searchValue.length);
+      /**
+       * Handles adding an item to the user selected items when pressed. We
+       * also close the dropdown and clears up the search input value. These
+       * behaviours can be modified to match your desired behaviour.
+       *
+       * @param onItemPress - the item that is pressed
+       */
       const onItemPress = (itemPressed: laureatesInterface) => {
         closeDropdown();
         setSearchValue('');
         addItem(itemPressed);
       };
+
+      const boldSection = item.firstname.substring(0, searchValue.length);
+      const normalSection = item.firstname.substring(searchValue.length);
+
       return (
         <TouchableOpacity
           style={styles.dropdownContainer}
@@ -161,22 +176,45 @@ const OnboardingScreen: FC<Props> = props => {
    * @param enteredText - string entered into the search input
    */
   const onChangeTextHandler = (enteredText: string) => {
-    setSearchValue(enteredText);
-    let dataFiltered: laureatesInterface[] = [];
-    rawData.forEach(data => {
-      const res = data.laureates.filter(
-        person =>
-          person.firstname
-            .toLowerCase()
-            .startsWith(enteredText.toLowerCase()) && !person.selected,
-      );
-      dataFiltered.push(...res);
-    });
+    /**
+     * Filters the raw data based on the user search query.
+     *
+     * @returns dataFiltered - data containing items, in which the search query
+     * presents
+     */
+    const filterData = (): laureatesInterface[] => {
+      let dataFiltered: laureatesInterface[] = [];
+      rawData.forEach(data => {
+        const res = data.laureates.filter(
+          person =>
+            person.firstname
+              .toLowerCase()
+              .startsWith(enteredText.toLowerCase()) && !person.selected,
+        );
+        dataFiltered.push(...res);
+      });
+      return dataFiltered;
+    };
 
-    const dataSorted = dataFiltered.sort((a, b) =>
-      a.firstname.localeCompare(b.firstname),
-    );
+    /**
+     * Sorts the data alphabetically
+     *
+     * @param dataFiltered - filtered version of the data from the previous pipeline
+     * @returns sorted version of the filtered data
+     */
+    const sortData = (
+      dataFiltered: laureatesInterface[],
+    ): laureatesInterface[] => {
+      return dataFiltered.sort((a, b) =>
+        a.firstname.localeCompare(b.firstname),
+      );
+    };
+
+    setSearchValue(enteredText);
+    const dataFiltered = filterData();
+    const dataSorted = sortData(dataFiltered);
     setDropdownData(dataSorted);
+
     if (enteredText && dataSorted.length) {
       openDropdown();
     } else {
@@ -245,6 +283,12 @@ const OnboardingScreen: FC<Props> = props => {
    * @returns <ReactElement> - a content row for a row of Accordion
    */
   const renderAccordionContent = (categoryItem: dataInterface) => {
+    /**
+     * Handles adding or removing an item, when pressed, based on the fact
+     * that if it was previously added or not.
+     *
+     * @param person - item to be added or removed
+     */
     const onItemPress = (person: laureatesInterface) => {
       if (person.selected) {
         removeItem(person);

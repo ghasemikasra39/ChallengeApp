@@ -20,10 +20,20 @@ interface Props {
 const SelectedItemsList: FC<Props> = props => {
   const {removeItem, selectedItems} = props;
 
+  /**
+   * Renders a single item in the horizontal list.
+   *
+   * @param item - item to be rendered
+   * @returns <ReactElement>
+   */
   const renderSelectedItems = ({item}: {item: laureatesInterface}) => {
+    /**
+     * Removes an item when it is pressed from the set of user selected items
+     */
     const onRemoveItem = () => {
       removeItem(item);
     };
+
     return (
       <TouchableOpacity style={styles.container} onPress={onRemoveItem}>
         <Text style={styles.text}>{item.firstname}</Text>
