@@ -34,3 +34,16 @@ The `src` directory contains the actual source code:
 ### External libraries 
 
 The only highlight can be `react-native-collapsible`, the rest of the packages can be found in most of the RN projects.
+
+### The meaning of the data I used
+
+Each category shows the area/topic in which some famous people released publication (scientific papers)
+e.g. in category `Chemistry`, you will find the firstname of the researchers who published a paper in this area. There are more details available for each piece of publication, but we don't need them. I did a small modification to the data:
+I added a boolean field called `selected` to keep track of the fact that if the user has already selected a person or not. So in my app, you can select people.
+
+### Demo
+You can find a demo here in my google drive: https://drive.google.com/file/d/1VuzcJfImaBOkutdbOb76b9ggzrCCs7lm/view?usp=sharing
+
+I have run the app on Android real device, IOS real device, android browser. The reader is invited to run the app on a desktop browser with big screens. I tried to make it responsive in big screens as well.
+
+
