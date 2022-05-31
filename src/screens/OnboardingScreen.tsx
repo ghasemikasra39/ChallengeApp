@@ -13,7 +13,7 @@ import {
   Easing,
   Dimensions,
 } from 'react-native';
-import {DATA, dataInterface, laureatesInterface} from '../../assets/data';
+import {dataInterface, laureatesInterface} from '../../assets/data';
 import Accordion from 'react-native-collapsible/Accordion';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -23,12 +23,16 @@ import {AppColors} from '../globals/AppColors';
 import {AppStyles} from '../globals/AppStyles';
 import {downArrow, plusIcon, upArrow} from '../globals/images';
 
+interface Props {
+  data: dataInterface[];
+}
+
 const {height} = Dimensions.get('screen');
 
-const OnboardingScreen: FC = () => {
+const OnboardingScreen: FC<Props> = props => {
   const fadeAnim = useRef<any>(new Animated.Value(0)).current;
   const [searchValue, setSearchValue] = useState<string>('');
-  const [rawData, setRawData] = useState<dataInterface[]>(DATA);
+  const [rawData, setRawData] = useState<dataInterface[]>(props.data);
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
   const [dropdownTop, setDropdownTop] = useState<number>(0);
   const [dropdownData, setDropdownData] = useState<laureatesInterface[]>([]);
@@ -113,6 +117,7 @@ const OnboardingScreen: FC = () => {
             renderItem={renderItem}
             data={dropdownData}
             style={styles.dropdownFlatList}
+            showsVerticalScrollIndicator={false}
           />
         </Animated.View>
       );
