@@ -6,7 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "test": "jest",
+    "test": "jest --watchAll",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "web": "cd web && webpack-dev-server --mode development --config webpack.config.js --hot --open"
   },
