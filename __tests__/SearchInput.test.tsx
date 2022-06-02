@@ -8,7 +8,7 @@ test('Renders default elements', () => {
   const onChangeTextHandlerMock = jest.fn((text: string) => {
     console.log('The entered text is: ', text);
   });
-  const {getByPlaceholderText, debug} = render(
+  const {getByPlaceholderText} = render(
     <SearchInput
       onChangeTextHandler={onChangeTextHandlerMock}
       searchValue={'static value'}
